@@ -48,10 +48,11 @@ moveRouter.get(`/character/:characterId/moves/:moveId`, async (req, res) =>{
 // CREATE
 moveRouter.post('/character/:characterId/moves', async (req, res) => {
   try {
-      await moveModel.create(characterId,req.body)
-      res.json('ok')
+    console.log('trying to post')
+      await moveModel.create(req.params.characterId, req.body)
+      res.json(req.body)
   } catch (error) {
-      res.statusCode(500).json(error)
+      // res.statusCode(500).json(error)
       console.log(error)
   }
 })
@@ -59,7 +60,6 @@ moveRouter.post('/character/:characterId/moves', async (req, res) => {
 // UPDATE
 moveRouter.put('/character/:characterId/moves/:moveId', async (req, res) => {
   try {
-    console.log(req.body)
       await moveModel.update(req.params.moveId, req.body)
       res.json("ok")
   } catch (error) {
@@ -72,7 +72,7 @@ moveRouter.put('/character/:characterId/moves/:moveId', async (req, res) => {
 // DELETE
 moveRouter.delete('/character/:characterId/moves/:moveId', async (req, res) => {
   try {
-      await moveModel.deleteMove(req.params.moveId)
+      await moveModel.deleteMove(req.params.characterId, req.params.moveId)
       res.json("ok")
   } catch (error) {
       res.statusCode(500).json(error)

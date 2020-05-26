@@ -15,7 +15,7 @@ app.use(express.static(`${__dirname}/client/build`))
 
 app.use('/api/character', characterRouter)
 app.use('/api/tier', tierRouter)
-app.use('/api/move', moveRouter)
+app.use('/api', moveRouter)
 
 app.get('/*', (req, res) => {
     res.sendFile(`${__dirname}/client/build/index.html`)

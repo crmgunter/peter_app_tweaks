@@ -5,7 +5,7 @@
  *
  */
 const mongoose = require('./connection.js')
-
+const CharacterModel = require('./character.js')
 /* Step 2
  *
  * TODO: create model schema 
@@ -42,16 +42,28 @@ function getMovesByCharacterID(characterId){
     return MoveModel.find({"characterId": characterId})
 }
 
-function create(moveData) {
-    return MoveModel.create(moveData)
+function create(characterId, moveData) {
+    CharacterModel.getCharacterById(characterId).then((character) => {
+        MoveModel.create(moveData).then((move) => {
+            character.moves.push(move)
+            character.save()
+        })
+    })
 }
 
 function update(moveId, moveData) {
     return MoveModel.findByIdAndUpdate(moveId, moveData)
 }
 
-function deleteMove(moveId) {
-    return MoveModel.findByIdAndDelete(moveId)
+function deleteMove(characterId, moveId) {
+    CharacterModel.getCharacterById(characterId).then((character) => {
+        const removedMoves = character.moves.filter((move) => move._id != moveId)
+        character.moves = removedMoves;
+
+        character.save().then(() => {
+            return MoveModel.findByIdAndDelete(moveId)
+        })
+    })
 }
 
 //exports

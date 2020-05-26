@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import axios from 'axios'
-import { Redirect } from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 
 export default class SingleCharacter extends Component {
 
@@ -9,7 +9,8 @@ export default class SingleCharacter extends Component {
             name: '',
             description: '',
             portrait: '',
-            tierLetter: ''
+            tierLetter: '',
+            moves: []
         }
     }
 
@@ -21,12 +22,14 @@ export default class SingleCharacter extends Component {
         const characterId = this.props.match.params.characterId
         console.log('characterId', characterId)
         const res = await axios.get(`/api/character/${characterId}`)
-        const newState = { ...this.state }
+        const newState = {...this.state}
         newState.character = res.data
         this.setState(newState)
     }
 
     render() {
+        console.log(this.state.character)
+
         if (this.state.redirect) {
             return (<Redirect to='/' />)
         }
@@ -37,6 +40,20 @@ export default class SingleCharacter extends Component {
                 <div><span>Name:</span> {this.state.character.name}</div>
                 <div><span>Description:</span> {this.state.character.description}</div>
                 <div><span>Tier:</span> {this.state.character.tierLetter}</div>
+
+                {this.state.character.moves ? <div>
+                    <div>Moves:</div><br />
+
+                    {this.state.character.moves.map((move, i) => (
+                        <div key={i}>
+                            <div>{move.name}</div>
+                            <div>{move.type}</div>
+                        </div>
+                    ))}
+                </div>
+                    : null}
+
+
             </div>
         )
     }

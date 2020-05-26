@@ -5,7 +5,6 @@
  *
  */
 const mongoose = require('./connection.js')
-const MoveModel = require('./move')
 /* Step 2
  *
  * TODO: create model schema 
@@ -17,7 +16,7 @@ const CharacterSchema = new mongoose.Schema({
     portrait: String,    
     tierLetter: String,
     description: String,
-    moves:[MoveModel]
+    moves: Array
 })
 
 const CharacterModel = mongoose.model('character', CharacterSchema)
